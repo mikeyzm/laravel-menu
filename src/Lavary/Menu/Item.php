@@ -351,8 +351,12 @@ class Item
                 $this->activate();
             }
         } else {
-            // We should consider a $strict config. If $strict then only match against fullURL.
-            if ($this->url() == \Request::url() || $this->url() == \Request::fullUrl()) {
+            $query = \Request::except('page');
+            $url = \Request::url();
+            if (count($query) > 0) {
+                $url .= '?' . http_build_query($query);
+            }
+            if ($this->url() == $url) {
                 $this->activate();
             }
         }
