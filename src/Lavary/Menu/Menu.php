@@ -61,17 +61,18 @@ class Menu
      *
      * @param string   $name
      * @param callable $callback
+     * @param array    $config
      *
      * @return Builder
      */
-    public function make($name, $callback)
+    public function make($name, $callback, $config = [])
     {
         if (!is_callable($callback)) {
             return null;
         }
 
         if (!array_key_exists($name, $this->menu)) {
-            $this->menu[$name] = new Builder($name, $this->loadConf($name));
+            $this->menu[$name] = new Builder($name, array_merge($this->loadConf(), $config));
         }
 
         // Registering the items
@@ -89,20 +90,11 @@ class Menu
     /**
      * Loads and merges configuration data.
      *
-     * @param string $name
-     *
      * @return array
      */
-    public function loadConf($name)
+    public function loadConf()
     {
-        $options = config('laravel-menu.settings');
-        $name = strtolower($name);
-
-        if (isset($options[$name]) && is_array($options[$name])) {
-            return array_merge($options['default'], $options[$name]);
-        }
-
-        return $options['default'];
+        return config('laravel-menu.settings');
     }
 
     /**
