@@ -94,7 +94,7 @@ class Menu
      */
     public function loadConf()
     {
-        return config('laravel-menu.settings');
+        return config('menu');
     }
 
     /**
